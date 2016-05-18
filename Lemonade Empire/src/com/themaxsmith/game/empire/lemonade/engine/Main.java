@@ -67,8 +67,12 @@ public class Main extends GameFrame {
 	public void renderCash(Graphics g ){
 		g.setFont(new Font("Arial", Font.BOLD, 20));
 		g.setColor(new Color(37, 99, 26));
-		g.drawString("$"+cash, 10, 30);
+		g.drawString("$"+cash, 10, 75);
 		
+		g.fillRect(10, 30, 150, 20);
+		g.setColor(Color.BLACK);
+		g.drawRect(10, 30, 150, 20);
+		g.drawString("Popularity:", 10, 20);
 		
 	}
 

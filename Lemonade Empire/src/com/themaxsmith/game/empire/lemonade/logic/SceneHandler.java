@@ -21,7 +21,7 @@ public class SceneHandler {
 	private int popularity = 20;
 	
 	private ArrayList<Store> stores = new ArrayList<Store>();
-	public boolean rerenderlevel =false;
+	
 	public SceneHandler(Main game) {
 		this.game=game;
 		game.addMouseMotionListener(onHover());

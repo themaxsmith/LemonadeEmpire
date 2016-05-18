@@ -14,12 +14,13 @@ import javax.imageio.ImageIO;
 import com.sun.prism.impl.ps.CachingShapeRep;
 import com.themaxsmith.game.empire.lemonade.engine.GameFrame;
 import com.themaxsmith.game.empire.lemonade.logic.Bot;
+import com.themaxsmith.game.empire.lemonade.logic.HitBoxHandler;
 import com.themaxsmith.game.empire.lemonade.logic.MouseMissed;
 import com.themaxsmith.game.empire.lemonade.logic.SceneHandler;
 import com.themaxsmith.game.empire.lemonade.render.HitBox;
 import com.themaxsmith.game.empire.lemonade.render.Screen;
 
-public abstract class Scene {
+public abstract class Scene implements HitBoxHandler {
 	private int x, imgx, storenum;
 	private BufferedImage level;
 	private SceneHandler handler;
@@ -83,26 +84,11 @@ public abstract class Scene {
 	}
 	public void onClick(MouseEvent e) {
 		synchronized (getHitBoxes()) {
-			if (getHandler().inGame()){
-				boolean missed=true;
-				for(HitBox box : getHitBoxes()){
-					
-					if(box.didClick(e)){
-						missed=false;
-						box.onHit();
-					}
-			
-				}
-				if(missed){
-					Store store = ((Store) this);
-					synchronized (store.getMobs()) {
-				    store.getMobs().add(new MouseMissed("MouseMissed", this, -2, e.getX(), e.getY()));
-				}}
-			}else{
+		
 				for(HitBox box : getHitBoxes()){
 					box.onClick(e);
 				}
-			}
+			
 		}
 	}
 	public boolean isMenu() {

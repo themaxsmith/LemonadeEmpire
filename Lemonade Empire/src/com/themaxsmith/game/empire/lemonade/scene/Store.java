@@ -3,6 +3,7 @@ package com.themaxsmith.game.empire.lemonade.scene;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -17,8 +18,10 @@ import com.themaxsmith.game.empire.lemonade.engine.Main;
 import com.themaxsmith.game.empire.lemonade.logic.Bot;
 import com.themaxsmith.game.empire.lemonade.logic.Button;
 import com.themaxsmith.game.empire.lemonade.logic.Mob;
+import com.themaxsmith.game.empire.lemonade.logic.MouseMissed;
 import com.themaxsmith.game.empire.lemonade.logic.NavArrows;
 import com.themaxsmith.game.empire.lemonade.logic.SceneHandler;
+import com.themaxsmith.game.empire.lemonade.logic.MenuGUI;
 import com.themaxsmith.game.empire.lemonade.render.HitBox;
 import com.themaxsmith.game.empire.lemonade.render.Screen;
 
@@ -27,8 +30,9 @@ public class Store extends Scene {
 	private BufferedImage level;
 	private NavArrows nav;
 	private int localCash=0;
-	private Button btn;
+	private MenuGUI upmenu;
 	private boolean inStore=true;
+	
 	private ArrayList<Mob> mobs = new ArrayList<Mob>();
 	private ArrayList<HitBox> store = new ArrayList<HitBox>();
 	private int alpha =255;
@@ -38,7 +42,7 @@ public class Store extends Scene {
 		super(handler,path);
 		this.setStorenum(storenum);
 		
-		btn = new Button(this, "Upgrade", 350, 0, 100, 30);
+		upmenu = new MenuGUI(this);
 		nav = new NavArrows(this,250);
 	}
 
@@ -110,14 +114,45 @@ public class Store extends Scene {
 		g.fillRect(0, 0, Main.WIDTH, Main.HEIGHT);
 		g.setColor(Color.BLACK);
 		g.setFont(new Font("Arial", Font.BOLD, 20));
-		g.drawString("Store #"+getHandler().getCurrentStoreID(), 700, 30);
+		g.drawString("Store #"+getHandler().getCurrentStoreID(), 700, 20);
 		for (Mob bot : getMobs()){
 			bot.renderOverlay(g);
 		}
-		btn.renderOverlay(g);
+		upmenu.renderOverlay(g);
 	}
 	public int getCash() {
 		// TODO Auto-generated method stub
 		return localCash;
 	}
+	public void onClick(MouseEvent e) {
+		if(upmenu.isActive()){
+			upmenu.onClick(e);
+		}else{
+		synchronized (getHitBoxes()) {
+		boolean missed=true;
+		for(HitBox box : getHitBoxes()){
+			if(box.didClick(e)){
+				missed=false;
+				box.onHit();
+			}
+	
+		}
+		if(missed){
+			Store store = ((Store) this);
+			synchronized (store.getMobs()) {
+		    store.getMobs().add(new MouseMissed("MouseMissed", this, -2, e.getX(), e.getY()));
+		}}}}
+	}
+	public boolean onHover(MouseEvent e) {
+		if(upmenu.isActive()){
+			return upmenu.onHover(e);
+		}else
+		for(HitBox box : getHitBoxes()){
+			if (box.isHovering(e))
+				return true;
+		}
+		return false;
+	}
+	
+	
 } 
