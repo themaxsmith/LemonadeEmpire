@@ -11,6 +11,7 @@ import com.themaxsmith.game.empire.lemonade.render.HitBox;
 import com.themaxsmith.game.empire.lemonade.render.Screen;
 import com.themaxsmith.game.empire.lemonade.scene.Scene;
 import com.themaxsmith.game.empire.lemonade.scene.Store;
+import com.themaxsmith.game.empire.lemonade.scene.StoreType;
 
 public class SceneHandler {
 	private Main game;
@@ -18,7 +19,7 @@ public class SceneHandler {
 	private Scene currentScene;
 	private MouseEvent currentMouseLocation;
 	private int currentStore =1;
-	private int popularity = 20;
+	private boolean isMutiple = false;
 	
 	private ArrayList<Store> stores = new ArrayList<Store>();
 	
@@ -37,14 +38,7 @@ public class SceneHandler {
 	public ArrayList<Store> getStores(){
 		return stores;
 	}
-	public int getCash(){
-		int totalcash = 0;
-		for (Store store : stores){
-			totalcash += store.getCash();
-			
-		}
-		return totalcash;
-	}
+
 	
 	public void render(Screen screen) {
 	currentScene.render(screen);
@@ -142,18 +136,37 @@ public class SceneHandler {
 		}
 	}
 	public void spawnPeople(){
-
+		
 		for (Store store : stores){
-			store.spawnPeople();
+			switch (store.getType().getRate()){
+			case High_Spawn:
+				store.spawnBot();
+				store.spawnBot();
+				store.spawnBot();
+				break;
+			case Low_Spawn:
+				if (((int)(Math.random()*2))==1){
+					store.spawnBot();
+				}
+				break;
+			case Med_Spawn:
+				store.spawnBot();
+				break;
+			default:
+				break;
+				
+			}
+		
 		}
 	}
 
-	public int getPopularity() {
-		return popularity;
+
+	public boolean isMutiple() {
+		return isMutiple;
 	}
 
-	public void setPopularity(int popularity) {
-		this.popularity = popularity;
+	public void setMutiple(boolean isMutiple) {
+		this.isMutiple = isMutiple;
 	}
 	
 } 

@@ -2,15 +2,15 @@ package com.themaxsmith.game.empire.lemonade.logic;
 
 
 import java.awt.Graphics;
-
 import com.themaxsmith.game.empire.lemonade.engine.Main;
 import com.themaxsmith.game.empire.lemonade.render.HitBox;
+import com.themaxsmith.game.empire.lemonade.render.HitBoxParent;
 import com.themaxsmith.game.empire.lemonade.render.Screen;
 import com.themaxsmith.game.empire.lemonade.render.Texture;
 import com.themaxsmith.game.empire.lemonade.scene.Scene;
 import com.themaxsmith.game.empire.lemonade.scene.Store;
 
-public class Bot extends Mob {
+public class Bot extends Mob implements HitBoxParent {
 	
 
 	
@@ -20,10 +20,12 @@ public class Bot extends Mob {
 	private HitBox hit;
 	private Texture hittext;
 	private Store store;
+	
 	public Bot(Store level, String texturepath,int direct, int yoff){
 		super("Bot", level ,texturepath,0,320+yoff);
 		this.direct=direct;
 		store=level;
+		
 		hittext=getLevel().getHandler().getGame().getTextureHandler().getTexture("question.png");
 		if (direct==1){
 		this.setX(5);
@@ -32,9 +34,12 @@ public class Bot extends Mob {
 		}
 	
 		anim= (int)(Math.random()*30);
-		if (1==(int)(Math.random()*level.getHandler().getPopularity())+1)
-			goBuy=true;
-		hit = new HitBox(getX(), getY(), 80, 220) {
+		int b = (level.getPopularity());
+		
+		int y = (int)(Math.random()*21);
+
+		
+			hit = new HitBox(this,getX(), getY(), 80, 220) {
 			
 			@Override
 			public void onHit() {
@@ -44,6 +49,10 @@ public class Bot extends Mob {
 			}
 		};
 		level.initHitBox(hit);
+		if (b>=y){
+			hit.setReg(false);
+			goBuy=true;
+		}
 	}
 	public void tick(){
 //		if (store.inBackground()){

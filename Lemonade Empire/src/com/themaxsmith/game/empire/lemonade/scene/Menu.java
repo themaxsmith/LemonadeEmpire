@@ -18,9 +18,10 @@ import com.themaxsmith.game.empire.lemonade.engine.Main;
 import com.themaxsmith.game.empire.lemonade.logic.Bot;
 import com.themaxsmith.game.empire.lemonade.logic.SceneHandler;
 import com.themaxsmith.game.empire.lemonade.render.HitBox;
+import com.themaxsmith.game.empire.lemonade.render.HitBoxParent;
 import com.themaxsmith.game.empire.lemonade.render.Screen;
 
-public class Menu extends Scene {
+public class Menu extends Scene implements HitBoxParent {
 	private int x, imgx;
 	private boolean switchb= false, setup=false;
 	private BufferedImage level;
@@ -33,7 +34,7 @@ public class Menu extends Scene {
 	public Menu( SceneHandler handler, String path) {
 		super(handler,path);
 		setMenu(true);
-	initHitBox(new HitBox(288,515,540,567) {
+	initHitBox(new HitBox(this,288,515,540,567) {
 			
 			@Override
 			public void onHit() {
@@ -110,12 +111,11 @@ if(clicked){
 	public void startGame(){
 		
 		
-		getHandler().addStore(new Store(getHandler(), "store1.png", 1));	
+		getHandler().addStore(new Store(getHandler(), StoreType.Stand));	
 		getHandler().setStore(1);
 		getHandler().startGame();
-		getHandler().addStore(new Store(getHandler(), "store3.png", 1));
-		getHandler().addStore(new Store(getHandler(), "store4.png", 1));
-		getHandler().addStore(new Store(getHandler(), "store5.png", 1));
+
+	
 
 		
 	}
@@ -177,5 +177,12 @@ if(clicked){
 		g.setFont(new Font("Arial", Font.BOLD, 20));
 		g.drawString(line1, 100, 250);
 		g.drawString(line2, 100, 300);
+	}
+
+
+	@Override
+	public boolean isRemove() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 } 

@@ -1,16 +1,19 @@
-package com.themaxsmith.game.empire.lemonade.logic;
+package com.themaxsmith.game.empire.lemonade.GUI;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
+import com.themaxsmith.game.empire.lemonade.logic.HitBoxHandler;
+import com.themaxsmith.game.empire.lemonade.logic.Mob;
 import com.themaxsmith.game.empire.lemonade.render.HitBox;
+import com.themaxsmith.game.empire.lemonade.render.HitBoxParent;
 import com.themaxsmith.game.empire.lemonade.render.Screen;
 import com.themaxsmith.game.empire.lemonade.render.onHit;
 import com.themaxsmith.game.empire.lemonade.scene.Scene;
 
 import javafx.scene.text.Font;
 
-public abstract class Button extends Mob implements onHit{
+public abstract class Button extends Mob implements onHit, HitBoxParent{
 	private int width, height;
 	private int xtex,ytex;
 	private boolean centered = false;
@@ -22,10 +25,11 @@ public abstract class Button extends Mob implements onHit{
 	public Button(Scene level, HitBoxHandler hand,String text, int x, int y, Layout l) {
 		super(text, level, null, x, y);
 		setupLayout(l);
-		hit = new HitBox(getX(), getY(), width, height) {public void onHit() {hit();}};
+		hit = new HitBox(this,getX(), getY(), width, height) {public void onHit() {hit();}};
 		hand.initHitBox(hit);
 	}
 	public void hit(){
+		
 		onHit();
 	}
 	@Override

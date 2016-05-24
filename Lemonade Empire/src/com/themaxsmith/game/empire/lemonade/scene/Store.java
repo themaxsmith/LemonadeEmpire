@@ -13,46 +13,48 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import com.sun.swing.internal.plaf.synth.resources.synth;
+import com.themaxsmith.game.empire.lemonade.GUI.Button;
+import com.themaxsmith.game.empire.lemonade.GUI.MenuGUI;
 import com.themaxsmith.game.empire.lemonade.engine.GameFrame;
 import com.themaxsmith.game.empire.lemonade.engine.Main;
 import com.themaxsmith.game.empire.lemonade.logic.Bot;
-import com.themaxsmith.game.empire.lemonade.logic.Button;
 import com.themaxsmith.game.empire.lemonade.logic.Mob;
 import com.themaxsmith.game.empire.lemonade.logic.MouseMissed;
 import com.themaxsmith.game.empire.lemonade.logic.NavArrows;
 import com.themaxsmith.game.empire.lemonade.logic.SceneHandler;
-import com.themaxsmith.game.empire.lemonade.logic.MenuGUI;
 import com.themaxsmith.game.empire.lemonade.render.HitBox;
 import com.themaxsmith.game.empire.lemonade.render.Screen;
 
 public class Store extends Scene {
-	private int  imgx;
-	private BufferedImage level;
+
 	private NavArrows nav;
-	private int localCash=0;
+
 	private MenuGUI upmenu;
-	private boolean inStore=true;
+	private int popularity = 5;
+	private StoreType type;
 	
 	private ArrayList<Mob> mobs = new ArrayList<Mob>();
-	private ArrayList<HitBox> store = new ArrayList<HitBox>();
 	private int alpha =255;
 
 
-	public Store(SceneHandler handler, String path, int storenum) {
-		super(handler,path);
-		this.setStorenum(storenum);
-		
+	public Store(SceneHandler handler, StoreType type) {
+		super(handler,type.getRes());
+		popularity = type.getPop();
+		this.setType(type); 
 		upmenu = new MenuGUI(this);
 		nav = new NavArrows(this,250);
+		
 	}
 
 	public void addCash(int cash){
-		localCash+=cash;
+		getHandler().getGame().addCash(cash);
 	}
 	
 
 	public void render(Screen screen) {
+		if(getHandler().isMutiple())
 		nav.render(screen);
+		
 		synchronized (getMobs()) {
 		for (Mob bot : getMobs()){
 		bot.render(screen);
@@ -69,13 +71,21 @@ public class Store extends Scene {
 		for (Mob bot : getMobs()){
 			bot.tick();
 		}
-	
+		for(int x= getHitBoxes().size()-1; x >= 0; x--){
+			
+			if(getHitBoxes().get(x).isRemove()){
+				getHitBoxes().remove(x);
+				
+			}
+		}
 		for(int x= getMobs().size()-1; x >= 0; x--){
 			
 			if(getMobs().get(x).isRemove()){
 				getMobs().remove(x);
 				
 			}
+	
+
 		}
 		}
 		if (alpha > 5){
@@ -85,7 +95,7 @@ public class Store extends Scene {
 		}
 	}
 
-	public void spawnPeople(){
+	public void spawnBot(){
 		int color = (int)(Math.random() * 3)+1;
 			int y = (int)( Math.random()*50);
 			boolean placed = false;
@@ -118,12 +128,14 @@ public class Store extends Scene {
 		for (Mob bot : getMobs()){
 			bot.renderOverlay(g);
 		}
+//		synchronized (getHitBoxes()) {
+//		for (HitBox f : getHitBoxes()){
+//			f.renderOverlay(g);
+//		}}
+	
 		upmenu.renderOverlay(g);
 	}
-	public int getCash() {
-		// TODO Auto-generated method stub
-		return localCash;
-	}
+	
 	public void onClick(MouseEvent e) {
 		if(upmenu.isActive()){
 			upmenu.onClick(e);
@@ -152,6 +164,28 @@ public class Store extends Scene {
 				return true;
 		}
 		return false;
+	}
+
+	public int getPopularity() {
+		return popularity+getHandler().getGame().getPopularity();
+	}
+
+	public void addPopularity(int popularity) {
+		this.popularity = popularity+getPopularity();
+		
+	}
+
+	public int getStorePop() {
+		// TODO Auto-generated method stub
+		return popularity;
+	}
+
+	public StoreType getType() {
+		return type;
+	}
+
+	public void setType(StoreType type) {
+		this.type = type;
 	}
 	
 	

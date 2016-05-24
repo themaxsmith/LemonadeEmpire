@@ -24,14 +24,7 @@ public class Basic extends Scene {
 
 	public Basic( SceneHandler handler, String path) {
 		super(handler,path);
-	initHitBox(new HitBox(0,0,100,100) {
-			
-			@Override
-			public void onHit() {
-				System.out.println("HIT");
-				
-			}
-		});
+
 		
 
 	}
