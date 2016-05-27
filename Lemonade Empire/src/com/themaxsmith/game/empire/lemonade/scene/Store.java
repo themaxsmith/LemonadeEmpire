@@ -4,16 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-
-import javax.imageio.ImageIO;
-
-import com.sun.swing.internal.plaf.synth.resources.synth;
-import com.themaxsmith.game.empire.lemonade.GUI.Button;
 import com.themaxsmith.game.empire.lemonade.GUI.MenuGUI;
 import com.themaxsmith.game.empire.lemonade.engine.GameFrame;
 import com.themaxsmith.game.empire.lemonade.engine.Main;
@@ -29,7 +20,7 @@ public class Store extends Scene {
 
 	private NavArrows nav;
 
-	private MenuGUI upmenu;
+	
 	private int popularity = 5;
 	private StoreType type;
 	
@@ -41,9 +32,9 @@ public class Store extends Scene {
 		super(handler,type.getRes());
 		popularity = type.getPop();
 		this.setType(type); 
-		upmenu = new MenuGUI(this);
-		nav = new NavArrows(this,250);
 		
+		nav = new NavArrows(this,250);
+		initHitBox(getHandler().getUpmenu().getUpgrade().getHitBox());
 	}
 
 	public void addCash(int cash){
@@ -51,6 +42,7 @@ public class Store extends Scene {
 	}
 	
 
+	@Override
 	public void render(Screen screen) {
 		if(getHandler().isMutiple())
 		nav.render(screen);
@@ -66,6 +58,7 @@ public class Store extends Scene {
 		
 	}
 	
+	@Override
 	public void tick(){
 		synchronized (getMobs()) {
 		for (Mob bot : getMobs()){
@@ -121,7 +114,7 @@ public class Store extends Scene {
 	public void renderOverlay(Graphics g) {
 
 		g.setColor(new Color(0, 0, 0, alpha ));
-		g.fillRect(0, 0, Main.WIDTH, Main.HEIGHT);
+		g.fillRect(0, 0, GameFrame.WIDTH, GameFrame.HEIGHT);
 		g.setColor(Color.BLACK);
 		g.setFont(new Font("Arial", Font.BOLD, 20));
 		g.drawString("Store #"+getHandler().getCurrentStoreID(), 700, 20);
@@ -133,12 +126,13 @@ public class Store extends Scene {
 //			f.renderOverlay(g);
 //		}}
 	
-		upmenu.renderOverlay(g);
+		getHandler().getUpmenu().renderOverlay(g);
 	}
 	
+	@Override 
 	public void onClick(MouseEvent e) {
-		if(upmenu.isActive()){
-			upmenu.onClick(e);
+		if(getHandler().getUpmenu().isActive()){
+			getHandler().getUpmenu().onClick(e);
 		}else{
 		synchronized (getHitBoxes()) {
 		boolean missed=true;
@@ -150,14 +144,15 @@ public class Store extends Scene {
 	
 		}
 		if(missed){
-			Store store = ((Store) this);
+			Store store = (this);
 			synchronized (store.getMobs()) {
 		    store.getMobs().add(new MouseMissed("MouseMissed", this, -2, e.getX(), e.getY()));
 		}}}}
 	}
+	@Override
 	public boolean onHover(MouseEvent e) {
-		if(upmenu.isActive()){
-			return upmenu.onHover(e);
+		if(getHandler().getUpmenu().isActive()){
+			return getHandler().getUpmenu().onHover(e);
 		}else
 		for(HitBox box : getHitBoxes()){
 			if (box.isHovering(e))

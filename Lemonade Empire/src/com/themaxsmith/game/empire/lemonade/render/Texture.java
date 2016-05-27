@@ -12,7 +12,7 @@ public class Texture {
 	public int width,height;
 public Texture(String file){
 	try {
-		rawimage = ImageIO.read(new File("res/"+file));
+		rawimage = ImageIO.read(new File("LemonadeEmpire/"+file));
 		width = rawimage.getWidth();
 		height = rawimage.getHeight();
 	} catch (IOException e) {
@@ -24,10 +24,26 @@ public Texture(String file){
 	for (int y = 0; y < ((rawimage.getHeight())); y++) {
 		for (int x = 0; x < ((rawimage.getWidth())); x++) {
 
-			texture[((x) + ((y) * rawimage.getWidth()))] = rawimage.getRGB((int) ((x)),(int) ((y)));
+			texture[((x) + ((y) * rawimage.getWidth()))] = rawimage.getRGB(((x)),((y)));
 			
 		}
 	}
 	
+}
+public Texture(BufferedImage read) {
+	
+		rawimage = read;
+		width = rawimage.getWidth();
+		height = rawimage.getHeight();
+
+	texture = new int[rawimage.getHeight() * rawimage.getWidth()];
+
+	for (int y = 0; y < ((rawimage.getHeight())); y++) {
+		for (int x = 0; x < ((rawimage.getWidth())); x++) {
+
+			texture[((x) + ((y) * rawimage.getWidth()))] = rawimage.getRGB(((x)),((y)));
+			
+		}
+	}
 }
 }

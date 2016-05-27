@@ -2,8 +2,6 @@ package com.themaxsmith.game.empire.lemonade.render;
 
 import java.awt.image.BufferedImage;
 
-import com.themaxsmith.game.empire.lemonade.engine.GameFrame;
-
 
 
 public class Screen {
@@ -92,8 +90,8 @@ public class Screen {
 		for (int y = 0; y < ((img.getHeight())); y++) {
 			for (int x = 0; x < ((img.getWidth())); x++) {
 
-				wholelevel[((x) + ((y) * getWidth()))] = img.getRGB((int) ((x)),
-						(int) ((y)));
+				wholelevel[((x) + ((y) * getWidth()))] = img.getRGB(((x)),
+						((y)));
 			}
 		}
 

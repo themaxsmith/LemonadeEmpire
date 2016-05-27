@@ -4,17 +4,12 @@ package com.themaxsmith.game.empire.lemonade.engine;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.event.MouseEvent;
-
 import com.themaxsmith.game.empire.lemonade.logic.SceneHandler;
 import com.themaxsmith.game.empire.lemonade.perks.Perk;
 import com.themaxsmith.game.empire.lemonade.render.Screen;
 import com.themaxsmith.game.empire.lemonade.render.TextureHandler;
-import com.themaxsmith.game.empire.lemonade.scene.Basic;
 import com.themaxsmith.game.empire.lemonade.scene.Menu;
 import com.themaxsmith.game.empire.lemonade.scene.Store;
-
-import javafx.scene.Cursor;
 
 public class Main extends GameFrame {
 	
@@ -22,7 +17,7 @@ public class Main extends GameFrame {
 	
 	private TextureHandler textHandler;
 	private SceneHandler sceneHandler;
-	private int cash=100000, hour=8, min = 0; 
+	private int cash=0, hour=8, min = 0; 
 	private int popularity = 0;
 	private Perk perk;
 
@@ -32,11 +27,13 @@ public class Main extends GameFrame {
 		game.start();
 	}
 	
+	@Override
 	public void init() {
       
 		setScreen(new Screen(WIDTH,HEIGHT));
-		sceneHandler = new SceneHandler(this);
 		textHandler = new TextureHandler();
+		sceneHandler = new SceneHandler(this);
+		
 		Menu menu = new Menu(sceneHandler, "start.png");
 		sceneHandler.setScene(menu);
 		addMouseListener(sceneHandler.onClick());
@@ -44,11 +41,13 @@ public class Main extends GameFrame {
 		
 	}
 
+	@Override
 	public void tick() {
 		tickcounter();
 		sceneHandler.tick();
 	}
 
+	@Override
 	public void render() {
 		renderBackground();
 		sceneHandler.render(getScreen());
@@ -157,7 +156,20 @@ public class Main extends GameFrame {
 	}
 
 	public void setPerk(Perk perk) {
+		if (this.perk != null)
+			this.perk.stop();
+		
 		this.perk = perk;
+	}
+
+	public void setPopularity(int o) {
+		popularity = o;
+		
+	}
+
+	public void setCash(int u) {
+	cash = u;
+		
 	}
 
 

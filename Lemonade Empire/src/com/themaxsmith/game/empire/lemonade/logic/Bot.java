@@ -2,12 +2,13 @@ package com.themaxsmith.game.empire.lemonade.logic;
 
 
 import java.awt.Graphics;
+
+import com.themaxsmith.game.empire.lemonade.engine.GameFrame;
 import com.themaxsmith.game.empire.lemonade.engine.Main;
 import com.themaxsmith.game.empire.lemonade.render.HitBox;
 import com.themaxsmith.game.empire.lemonade.render.HitBoxParent;
 import com.themaxsmith.game.empire.lemonade.render.Screen;
 import com.themaxsmith.game.empire.lemonade.render.Texture;
-import com.themaxsmith.game.empire.lemonade.scene.Scene;
 import com.themaxsmith.game.empire.lemonade.scene.Store;
 
 public class Bot extends Mob implements HitBoxParent {
@@ -30,7 +31,7 @@ public class Bot extends Mob implements HitBoxParent {
 		if (direct==1){
 		this.setX(5);
 		}else{
-		setX(Main.WIDTH);
+		setX(GameFrame.WIDTH);
 		}
 	
 		anim= (int)(Math.random()*30);
@@ -54,6 +55,7 @@ public class Bot extends Mob implements HitBoxParent {
 			goBuy=true;
 		}
 	}
+	@Override
 	public void tick(){
 //		if (store.inBackground()){
 //
@@ -102,7 +104,7 @@ public class Bot extends Mob implements HitBoxParent {
 		}else{
 		if(direct==1){
 		setX(getX()+WALKSPEED);
-		if(getX() > Main.WIDTH){
+		if(getX() > GameFrame.WIDTH){
 		setRemove(true);
 		}
 		}else{
@@ -114,6 +116,7 @@ public class Bot extends Mob implements HitBoxParent {
 		if (!(getLevel().inBackground()))
 		hit.setHit(getX()+20, getY(), 40, 220);
 	}
+	@Override
 	public void render(Screen screen) {
 			if(anim > 40){
 			screen.render(getX(), getY() ,1, 160, 0, 0, 0, getTexture(), true, direct);	
@@ -129,6 +132,7 @@ public class Bot extends Mob implements HitBoxParent {
 
 
 }
+	@Override
 	public void renderOverlay(Graphics g ){
 		if(bought){
 		g.drawString("+ $2", getX()+20, getY()+20-(anim-50));

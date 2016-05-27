@@ -2,20 +2,13 @@ package com.themaxsmith.game.empire.lemonade.scene;
 
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-
 import javax.imageio.ImageIO;
 
-import com.sun.prism.impl.ps.CachingShapeRep;
-import com.themaxsmith.game.empire.lemonade.engine.GameFrame;
-import com.themaxsmith.game.empire.lemonade.logic.Bot;
 import com.themaxsmith.game.empire.lemonade.logic.HitBoxHandler;
-import com.themaxsmith.game.empire.lemonade.logic.MouseMissed;
 import com.themaxsmith.game.empire.lemonade.logic.SceneHandler;
 import com.themaxsmith.game.empire.lemonade.render.HitBox;
 import com.themaxsmith.game.empire.lemonade.render.Screen;
@@ -30,11 +23,9 @@ public abstract class Scene implements HitBoxHandler {
 	public Scene( SceneHandler handler,  String path) {
 		x = 0;
 		this.handler = handler;
-		try {
-			level = ImageIO.read(new File("res/"+path));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	
+			level = handler.getGame().getTextureHandler().getTexture(path).rawimage;
+	
         
 		imgx = level.getWidth();
 
@@ -46,7 +37,7 @@ public abstract class Scene implements HitBoxHandler {
 	public void setNewScene(Screen screen, String path){
 		x = 0;
 		try {
-			level = ImageIO.read(new File("res/"+path));
+			level = ImageIO.read(new File("LemonadeEmpire/"+path));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -62,6 +53,7 @@ public abstract class Scene implements HitBoxHandler {
 	public abstract void tick();
 	public abstract void renderOverlay(Graphics g);
 	
+	@Override
 	public void initHitBox(HitBox x){
 		synchronized (getHitBoxes()) {
 			getHitBoxes().add(x);

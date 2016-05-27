@@ -6,13 +6,10 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.imageio.ImageIO;
-
+import com.themaxsmith.game.empire.lemonade.GUI.MenuGUI;
 import com.themaxsmith.game.empire.lemonade.engine.GameFrame;
 import com.themaxsmith.game.empire.lemonade.engine.Main;
 import com.themaxsmith.game.empire.lemonade.logic.Bot;
@@ -47,6 +44,7 @@ public class Menu extends Scene implements HitBoxParent {
 	}
 	
 
+	@Override
 	public void render(Screen screen) {
 		if (switchb){
 			
@@ -56,6 +54,7 @@ public class Menu extends Scene implements HitBoxParent {
 		}
 	}
 	
+	@Override
 	public void tick(){
 if(clicked){
 	if (alpha <250){
@@ -110,10 +109,12 @@ if(clicked){
 	}
 	public void startGame(){
 		
-		
+		getHandler().setUpmenu(new MenuGUI(getHandler()));
 		getHandler().addStore(new Store(getHandler(), StoreType.Stand));	
 		getHandler().setStore(1);
+	
 		getHandler().startGame();
+		
 
 	
 
@@ -170,7 +171,7 @@ if(clicked){
 			
 		}
 		g.setColor(new Color(0, 0, 0, alpha));
-		g.fillRect(0, 0, Main.WIDTH, Main.HEIGHT);
+		g.fillRect(0, 0, GameFrame.WIDTH, GameFrame.HEIGHT);
 		g.setColor(new Color(255, 255, 255, alpha));
 		g.setFont(new Font("Arial", Font.BOLD, 10));
 		g.drawString("Lemonade Empire By Maxwell Smith", 600, 580);

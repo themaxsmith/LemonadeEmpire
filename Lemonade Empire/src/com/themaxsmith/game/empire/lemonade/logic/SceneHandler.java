@@ -6,17 +6,17 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
+import com.themaxsmith.game.empire.lemonade.GUI.MenuGUI;
 import com.themaxsmith.game.empire.lemonade.engine.Main;
-import com.themaxsmith.game.empire.lemonade.render.HitBox;
 import com.themaxsmith.game.empire.lemonade.render.Screen;
 import com.themaxsmith.game.empire.lemonade.scene.Scene;
 import com.themaxsmith.game.empire.lemonade.scene.Store;
-import com.themaxsmith.game.empire.lemonade.scene.StoreType;
 
 public class SceneHandler {
 	private Main game;
 	private boolean inGame;
 	private Scene currentScene;
+	private MenuGUI upmenu;
 	private MouseEvent currentMouseLocation;
 	private int currentStore =1;
 	private boolean isMutiple = false;
@@ -26,6 +26,7 @@ public class SceneHandler {
 	public SceneHandler(Main game) {
 		this.game=game;
 		game.addMouseMotionListener(onHover());
+
 	}
 
 	public void addStore(Store store ){
@@ -110,9 +111,13 @@ public class SceneHandler {
 				currentScene.onClick(e);
 			}
 			//unused mouse events
+			@Override
 			public void mouseClicked(MouseEvent e) {}
+			@Override
 			public void mouseEntered(MouseEvent e) {}
+			@Override
 			public void mouseExited(MouseEvent e) {}
+			@Override
 			public void mouseReleased(MouseEvent e) {}
 			};
 			
@@ -167,6 +172,14 @@ public class SceneHandler {
 
 	public void setMutiple(boolean isMutiple) {
 		this.isMutiple = isMutiple;
+	}
+
+	public MenuGUI getUpmenu() {
+		return upmenu;
+	}
+
+	public void setUpmenu(MenuGUI upmenu) {
+		this.upmenu = upmenu;
 	}
 	
 } 

@@ -3,17 +3,7 @@ package com.themaxsmith.game.empire.lemonade.scene;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.imageio.ImageIO;
-
-import com.themaxsmith.game.empire.lemonade.engine.GameFrame;
-import com.themaxsmith.game.empire.lemonade.logic.Bot;
 import com.themaxsmith.game.empire.lemonade.logic.SceneHandler;
-import com.themaxsmith.game.empire.lemonade.render.HitBox;
 import com.themaxsmith.game.empire.lemonade.render.Screen;
 
 public class Basic extends Scene {
@@ -30,9 +20,11 @@ public class Basic extends Scene {
 	}
 	
 
+	@Override
 	public void render(Screen screen) {
 	}
 	
+	@Override
 	public void tick(){
 
 	}

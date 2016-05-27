@@ -7,9 +7,10 @@ import java.util.ArrayList;
 
 import com.themaxsmith.game.empire.lemonade.GUI.Button.Layout;
 import com.themaxsmith.game.empire.lemonade.logic.HitBoxHandler;
-import com.themaxsmith.game.empire.lemonade.perks.Perk;
+import com.themaxsmith.game.empire.lemonade.logic.SaveLoadGame;
+import com.themaxsmith.game.empire.lemonade.logic.SceneHandler;
+import com.themaxsmith.game.empire.lemonade.perks.AdvertisePerk;
 import com.themaxsmith.game.empire.lemonade.render.HitBox;
-import com.themaxsmith.game.empire.lemonade.scene.Scene;
 import com.themaxsmith.game.empire.lemonade.scene.Store;
 import com.themaxsmith.game.empire.lemonade.scene.StoreType;
 
@@ -21,104 +22,60 @@ public class MenuGUI implements HitBoxHandler {
 	private boolean isActive = false;
 	private Button upgrade;
 	
-	public MenuGUI(Store level){
+	public MenuGUI(SceneHandler sceneHandler){
 	
 	
-	upgrade = new Button(level, this,"Menu", 350, 0, Layout.SMALL_CENTERED) {
+	setUpgrade(new Button(sceneHandler, this,"Menu", 350, 0, Layout.SMALL_CENTERED) {
 		
 		@Override
 		public void onHit() {
 			if (isActive){
 				isActive = false;
-				upgrade.setName("Menu");
-				upgrade.setupLayout(Layout.SMALL_CENTERED);
+				getUpgrade().setName("Menu");
+				getUpgrade().setupLayout(Layout.SMALL_CENTERED);
 			}else{
 				isActive = true;
-				upgrade.setName("Close");
-				upgrade.setupLayout(Layout.SMALL_CENTERED);
+				getUpgrade().setName("Close");
+				getUpgrade().setupLayout(Layout.SMALL_CENTERED);
 			}
-		}
-	};
-	buttons.add(new Button(level, this, "Buy/Upgrades", 70, 50, Layout.MED_CENTERED) {
-		@Override
-		public void onHit() {
-			// TODO Auto-generated method stub	
-		}
-	});
-	buttons.add(new Button(level, this, "Stats", 70, 100, Layout.MED_CENTERED) {
-		@Override
-		public void onHit() {
-			// TODO Auto-generated method stub	
 		}
 	});
 
-	buttons.add(new BuyButton(level, this, 300, 50, 20, "Advertise for a hour", 5) {
+	buttons.add(new Button(sceneHandler, this, "Save", 70, 50, Layout.MED_CENTERED) {
+		@Override
 		public void onHit() {
-			Perk p = new Perk(getLevel().getHandler().getGame(), 10) {
-				
-				@Override
-				public void stop() {
-					getGame().addPopularity(-5);
-					
-				}
-				
-				@Override
-				public void start() {
-					getGame().setPerk(this);
-					getGame().addPopularity(2);
-				}
-			};
-	
+			SaveLoadGame.Save(getLevel().getHandler());
+		}
+	});
+	buttons.add(new Button(sceneHandler, this, "Load Game", 70, 100, Layout.MED_CENTERED) {
+		@Override
+		public void onHit() {
+		SaveLoadGame.Load(getLevel().getHandler());
+		}
+	});
+	buttons.add(new Button(sceneHandler, this, "Quit", 70, 150, Layout.MED_CENTERED) {
+		@Override
+		public void onHit() {
+		System.exit(0);
+		}
+	});
+	buttons.add(new BuyButton(sceneHandler, this, 300, 50, 20, "Advertise for 2 hours", 5) {
+		@Override
+		public void onHit() {
+			 new AdvertisePerk(getLevel().getHandler().getGame(), 120);
 		}});
+	buttons.add(new BuyStoreButton(sceneHandler, this, 300, 100, 20, StoreType.Stand));
+	buttons.add(new BuyStoreButton(sceneHandler, this, 300, 150, 50, StoreType.Cart));
+	buttons.add(new BuyStoreButton(sceneHandler, this, 300, 200, 120, StoreType.Truck));
+	buttons.add(new BuyStoreButton(sceneHandler, this, 300, 250, 400, StoreType.Building));
+	buttons.add(new UpgradeBrandButton(sceneHandler, this, 300, 300, Layout.LARGE_LEFT));
 	
-	buttons.add(new Button(level, this, "$40 | Basic Table (Store)", 300, 100, Layout.LARGE_LEFT) {
-		
-		@Override
-		public void onHit() {
-			getLevel().getHandler().addStore(new Store(getLevel().getHandler(), StoreType.Building));
-			getLevel().getHandler().setMutiple(true);
-		}
-	});
-	buttons.add(new Button(level, this, "$60 | Basic Cart (Store)", 300, 150, Layout.LARGE_LEFT) {
-		
-		@Override
-		public void onHit() {
-			// TODO Auto-generated method stub
-			
-		}
-	});
-	buttons.add(new Button(level, this, "$120 | Truck (Store)", 300, 200, Layout.LARGE_LEFT) {
-		
-		@Override
-		public void onHit() {
-			// TODO Auto-generated method stub
-			
-		}
-	});
-	buttons.add(new Button(level, this, "$500 | Building (Store)", 300, 250, Layout.LARGE_LEFT) {
-		
-		@Override
-		public void onHit() {
-			// TODO Auto-generated method stub
-			
-		}
-	});
-	buttons.add(new Button(level, this, "$10 P/Hour | Hire an Employee @ Store "+level.getHandler().getCurrentStoreID(), 300, 300, Layout.LARGE_LEFT) {
-		
-		@Override
-		public void onHit() {
-			// TODO Auto-generated method stub
-			
-		}
-	});
-	buttons.add(new UpgradeBrandButton(level, this, 300, 350, Layout.LARGE_LEFT));
-	level.initHitBox(upgrade.getHitBox());
 }
 	public boolean isActive(){
 		return isActive;
 	}
 	public void renderOverlay(Graphics g) {
-	upgrade.renderOverlay(g);
+	getUpgrade().renderOverlay(g);
 	if (isActive){
 		g.setColor(new Color(0, 0, 0, 170));
 		g.fillRect(50, 30, 700, 500);
@@ -128,7 +85,8 @@ public class MenuGUI implements HitBoxHandler {
 	}
 	
 	}
-	}	public void initHitBox(HitBox x){
+	}	@Override
+	public void initHitBox(HitBox x){
 		synchronized (getHitBoxes()) {
 			getHitBoxes().add(x);
 		}
@@ -159,6 +117,12 @@ public class MenuGUI implements HitBoxHandler {
 		}
 		return false;
 		
+	}
+	public Button getUpgrade() {
+		return upgrade;
+	}
+	public void setUpgrade(Button upgrade) {
+		this.upgrade = upgrade;
 	}
 	
 }
